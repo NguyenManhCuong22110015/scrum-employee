@@ -46,8 +46,8 @@ public class LeaveRequestService implements ILeaveRequestService {
             leaveRequest.setLeave_status(Leave_Status_Enum.PENDING); // default
             leaveRequest.setApproved_at(null); // chưa duyệt
             leaveRequest.setCreate_at(new Timestamp(System.currentTimeMillis()));
-
-            return leaveRequest;
+            Leave_Request requestSaved = leaveRequestRepository.save(leaveRequest);
+            return requestSaved;
         } catch (Exception e) {
             throw e;
         }
