@@ -42,7 +42,7 @@ public class Leave_Request {
     @Enumerated(EnumType.STRING)
     private Leave_Status_Enum leave_status = Leave_Status_Enum.PENDING;
 
-    @Column(name = "approved_at", nullable = false, updatable = false)
+    @Column(name = "approved_at", nullable = true)
     private Timestamp approved_at;
 
     @Column(name = "create_at", nullable = false, updatable = false)

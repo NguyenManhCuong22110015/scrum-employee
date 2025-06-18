@@ -24,6 +24,7 @@ public class LeaveRequestController {
         return ResponseEntity.ok(leaveRequest);
     }
 
+    @PostMapping("/create")
     public ResponseEntity<Leave_Request> createLeaveRequest(@Valid @RequestBody LeaveRequestDTO requestDTO){
         Leave_Request leaveRequest= leaveRequestService.create(requestDTO);
         return ResponseEntity.ok(leaveRequest);
