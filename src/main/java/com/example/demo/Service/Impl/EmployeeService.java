@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -140,6 +141,19 @@ public class EmployeeService implements IEmployeeService {
         } catch (Exception e) {
             log.error("Error checking if employee exists with email {}: {}", email, e.getMessage(), e);
             throw e;
+        }
+    }
+
+    @Override
+    public boolean checkIsAdmin(String emailRequester) {
+        try {
+            Employee employee = employeeRepository.findByEmail(emailRequester)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            return employee.getRole() == Employee_Role_Enum.MANAGER;
+        } catch (Exception e) {
+            // Ghi log hoặc xử lý lỗi cụ thể nếu cần
+            return false;
         }
     }
 }
