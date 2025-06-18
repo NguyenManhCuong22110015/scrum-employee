@@ -67,9 +67,35 @@ public class LeaveRequestService implements ILeaveRequestService {
 
     }
 
+
     // @Override
     // public List<Leave_Request> getLeaveRequestByEmail(String email) {
     //     // Gọi phương thức ĐÃ SỬA TÊN trong Repository
     //     return leaveRequestRepository.findByEmployeeEmail(email);
     // }
+
+    @Override
+    public void approveRequest(UUID id) {
+        try {
+            Leave_Request leaveRequest = leaveRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
+            leaveRequest.setLeave_status(Leave_Status_Enum.APPROVED);
+            leaveRequestRepository.save(leaveRequest);
+        }
+        catch (Exception e){
+            throw e;
+        }
+    }
+
+    @Override
+    public void rejectRequest(UUID id) {
+        try {
+            Leave_Request leaveRequest = leaveRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
+            leaveRequest.setLeave_status(Leave_Status_Enum.REJECTED);
+            leaveRequestRepository.save(leaveRequest);
+        }
+        catch (Exception e){
+            throw e;
+        }
+    }
+
 }

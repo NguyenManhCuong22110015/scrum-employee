@@ -2,6 +2,8 @@ package com.example.demo.Service.Impl;
 
 import java.util.List;
 
+import com.example.demo.Enum.Employee_Role_Enum;
+import com.example.demo.Exception.EmployeeAlreadyExists;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,12 @@ import com.example.demo.Service.IEmployeeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+
+import java.util.List;
+import java.util.UUID;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +59,7 @@ public class EmployeeService implements IEmployeeService {
     public Employee create(EmployeeDTO employeeDTO) {
         try {
             if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
-                throw new RuntimeException("Employee with email " + employeeDTO.getEmail() + " already exists");
+                throw new EmployeeAlreadyExists("Employee already exists");
             }
 
             Employee employee = new Employee();
@@ -61,6 +69,7 @@ public class EmployeeService implements IEmployeeService {
             employee.setRole(employeeDTO.getRole());
             employee.setManagerEmail(employeeDTO.getManagerEmail());
             Employee savedEmployee = employeeRepository.save(employee);
+
             log.info("Created new employee with email: {}", savedEmployee.getEmail());
             return savedEmployee;
 
@@ -140,6 +149,19 @@ public class EmployeeService implements IEmployeeService {
         } catch (Exception e) {
             log.error("Error checking if employee exists with email {}: {}", email, e.getMessage(), e);
             throw e;
+        }
+    }
+
+    @Override
+    public boolean isManager(String emailRequester) {
+        try {
+            Employee employee = employeeRepository.findByEmail(emailRequester)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            return employee.getRole() == Employee_Role_Enum.MANAGER;
+        } catch (Exception e) {
+            // Ghi log hoặc xử lý lỗi cụ thể nếu cần
+            return false;
         }
     }
 }

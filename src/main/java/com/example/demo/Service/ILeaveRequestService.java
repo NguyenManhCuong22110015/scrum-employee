@@ -16,5 +16,12 @@ public interface ILeaveRequestService {
 
     void delete(UUID id);
 
+
     // List<Leave_Request> getLeaveRequestByEmail(String email);
+
+    void approveRequest(UUID id);
+
+    void rejectRequest(UUID id);
+
+
 }

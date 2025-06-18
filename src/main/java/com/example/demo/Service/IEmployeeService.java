@@ -4,6 +4,7 @@ import com.example.demo.DTO.Request.EmployeeDTO;
 import com.example.demo.Model.Employee;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface IEmployeeService {
 
@@ -22,4 +23,7 @@ public interface IEmployeeService {
     List<Employee> getByManagerEmail(String managerEmail);
     
     boolean existsByEmail(String email);
+
+    boolean isManager(String emailRequester);
+
 }
