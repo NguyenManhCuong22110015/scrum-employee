@@ -4,13 +4,7 @@ package com.example.demo.Controllers;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.DTO.Request.LeaveRequestDTO;
 import com.example.demo.Exception.ResourceNotFoundException;
@@ -29,8 +23,7 @@ public class LeaveRequestController {
     private final ILeaveRequestService leaveRequestService;
 
     private final IEmployeeService employeeService;
-=======
-    
+
 
 
     @GetMapping("/{id}")
@@ -52,7 +45,7 @@ public class LeaveRequestController {
     }
 
     @PostMapping("/approve")
-    public String approveRequest(@RequestParam  String emailRequester, @RequestParam UUID id){
+    public String approveRequest(@RequestParam String emailRequester, @RequestParam UUID id){
         if(employeeService.checkIsAdmin(emailRequester)){
             throw  new ResourceNotFoundException("No");
         }
