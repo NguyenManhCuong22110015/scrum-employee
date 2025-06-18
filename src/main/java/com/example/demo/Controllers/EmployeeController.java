@@ -1,89 +1,69 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.DTO.Request.EmployeeDTO;
+import com.example.demo.Model.Employee;
+import com.example.demo.Service.IEmployeeService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import com.example.demo.Model.Employee;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-
-import com.example.demo.Services.EmployeeRepository;
-
-
-import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
-
-
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/api/v1/employees")
+@RequiredArgsConstructor
 public class EmployeeController {
 
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    private final IEmployeeService employeeService;
 
     @GetMapping
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public ResponseEntity<List<Employee>> getAllEmployees() {
+        List<Employee> employees = employeeService.getAll();
+        return ResponseEntity.ok(employees);
     }
 
-    @GetMapping("/find/{email}")
-    public Employee getEmployeeById(@PathVariable String email) {
-        return employeeRepository.findById(email).orElse(null);
+    @GetMapping("/{email}")
+    public ResponseEntity<Employee> getEmployeeByEmail(@PathVariable String email) {
+        Employee employee = employeeService.getById(email);
+        return ResponseEntity.ok(employee);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+        Employee employee = employeeService.create(employeeDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(employee);
     }
 
     @PutMapping("/update/{email}")
-    public Employee updateEmployee(@PathVariable String email, @RequestBody Employee updatedEmployee) {
-        Employee employee = employeeRepository.findById(email).orElse(null);
-        if (employee != null) {
-            employee.setFull_name(updatedEmployee.getFull_name());
-            employee.setDepartment(updatedEmployee.getDepartment());
-            employee.setRole(updatedEmployee.getRole());
-            employee.setLeave_balance(updatedEmployee.getLeave_balance());
-            employee.setManager_email(updatedEmployee.getManager_email());
-            return employeeRepository.save(employee);
-        } else {
-            return null;
-        }
-    }
-
-    @PostMapping("/add")
-    public Employee createEmployee(@RequestBody Employee employee) {
-        return employeeRepository.save(employee);
+    public ResponseEntity<Employee> updateEmployee(@PathVariable String email, 
+                                                  @Valid @RequestBody EmployeeDTO employeeDTO) {
+        Employee updatedEmployee = employeeService.update(email, employeeDTO);
+        return ResponseEntity.ok(updatedEmployee);
     }
 
     @DeleteMapping("/delete/{email}")
-    public void deleteEmployee(@PathVariable String email) {
-        employeeRepository.deleteById(email);
+    public ResponseEntity<String> deleteEmployee(@PathVariable String email) {
+        employeeService.delete(email);
+        return ResponseEntity.ok("Employee deleted successfully!");
     }
 
-
-
-    private Map<String, Employee> employeeMap = new HashMap<>();
-
-
-    @GetMapping("/{email}")
-    public Employee getEmployee(@PathVariable String email) {
-        return employeeMap.get(email);
+    @GetMapping("/department/{department}")
+    public ResponseEntity<List<Employee>> getEmployeesByDepartment(@PathVariable String department) {
+        List<Employee> employees = employeeService.getByDepartment(department);
+        return ResponseEntity.ok(employees);
     }
 
-    @PostMapping
-    public Employee addEmployee(@RequestBody Employee employee) {
-        employeeMap.put(employee.getEmail(), employee);
-        return employee;
+    @GetMapping("/manager/{managerEmail}")
+    public ResponseEntity<List<Employee>> getEmployeesByManager(@PathVariable String managerEmail) {
+        List<Employee> employees = employeeService.getByManagerEmail(managerEmail);
+        return ResponseEntity.ok(employees);
     }
 
-
-
-
-
+    @GetMapping("/exists/{email}")
+    public ResponseEntity<Boolean> checkEmployeeExists(@PathVariable String email) {
+        boolean exists = employeeService.existsByEmail(email);
+        return ResponseEntity.ok(exists);
+    }
 }
