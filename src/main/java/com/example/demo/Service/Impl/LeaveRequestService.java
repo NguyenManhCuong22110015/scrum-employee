@@ -63,4 +63,9 @@ public class LeaveRequestService implements ILeaveRequestService {
     public void delete(UUID id) {
 
     }
+
+    @Override
+    public void approveRequest() {
+
+    }
 }

@@ -14,6 +14,12 @@ import com.example.demo.Service.IEmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
+import java.util.List;
+import java.util.UUID;
+
+
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -58,9 +64,13 @@ public class EmployeeService implements IEmployeeService {
             employee.setEmail(employeeDTO.getEmail());
             employee.setFullName(employeeDTO.getFullName());
             employee.setDepartment(employeeDTO.getDepartment());
+
+
             employee.setRole(employeeDTO.getRole());
+
             employee.setManagerEmail(employeeDTO.getManagerEmail());
             Employee savedEmployee = employeeRepository.save(employee);
+
             log.info("Created new employee with email: {}", savedEmployee.getEmail());
             return savedEmployee;
 
@@ -140,6 +150,19 @@ public class EmployeeService implements IEmployeeService {
         } catch (Exception e) {
             log.error("Error checking if employee exists with email {}: {}", email, e.getMessage(), e);
             throw e;
+        }
+    }
+
+    @Override
+    public boolean checkIsAdmin(String emailRequester) {
+        try {
+            Employee employee = employeeRepository.findByEmail(emailRequester)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            return employee.getRole() == Employee_Role_Enum.MANAGER;
+        } catch (Exception e) {
+            // Ghi log hoặc xử lý lỗi cụ thể nếu cần
+            return false;
         }
     }
 }
