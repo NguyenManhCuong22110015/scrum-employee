@@ -1,17 +1,18 @@
 package com.example.demo.Service.Impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.DTO.Request.EmployeeDTO;
-import com.example.demo.Enum.Employee_Role_Enum;
 import com.example.demo.Exception.ResourceNotFoundException;
 import com.example.demo.Model.Employee;
 import com.example.demo.Repository.EmployeeRepository;
 import com.example.demo.Service.IEmployeeService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +50,6 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public Employee create(EmployeeDTO employeeDTO) {
         try {
-            // Check if employee already exists
             if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
                 throw new RuntimeException("Employee with email " + employeeDTO.getEmail() + " already exists");
             }
@@ -58,13 +58,12 @@ public class EmployeeService implements IEmployeeService {
             employee.setEmail(employeeDTO.getEmail());
             employee.setFullName(employeeDTO.getFullName());
             employee.setDepartment(employeeDTO.getDepartment());
-            employee.setRole(employeeDTO.getRole() != null ? employeeDTO.getRole() : Employee_Role_Enum.EMPLOYEE);
+            employee.setRole(employeeDTO.getRole());
             employee.setManagerEmail(employeeDTO.getManagerEmail());
-            employee.setLeaveBalance(employeeDTO.getLeaveBalance() != null ? employeeDTO.getLeaveBalance() : 12);
-
             Employee savedEmployee = employeeRepository.save(employee);
             log.info("Created new employee with email: {}", savedEmployee.getEmail());
             return savedEmployee;
+
         } catch (Exception e) {
             log.error("Error creating employee: {}", e.getMessage(), e);
             throw e;
@@ -77,12 +76,11 @@ public class EmployeeService implements IEmployeeService {
             Employee existingEmployee = employeeRepository.findById(email)
                     .orElseThrow(() -> new ResourceNotFoundException("Employee not found with email: " + email));
 
-            // Update fields
             existingEmployee.setFullName(employeeDTO.getFullName());
             existingEmployee.setDepartment(employeeDTO.getDepartment());
             existingEmployee.setRole(employeeDTO.getRole());
             existingEmployee.setManagerEmail(employeeDTO.getManagerEmail());
-            if (employeeDTO.getLeaveBalance() != null) {
+            if (employeeDTO.getLeaveBalance()  != null) {
                 existingEmployee.setLeaveBalance(employeeDTO.getLeaveBalance());
             }
 
