@@ -1,13 +1,19 @@
 package com.example.demo.Model;
 
 import com.example.demo.Enum.Employee_Role_Enum;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "employees")
+@Table(name = "employee")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +23,7 @@ public class Employee {
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "full_name", nullable = false, length = 255)
+    @Column(name = "fullName", nullable = false, length = 255)
     private String fullName;
 
     @Column(name = "department", nullable = false, length = 100)
@@ -27,9 +33,9 @@ public class Employee {
     @Column(name = "role", nullable = false)
     private Employee_Role_Enum role = Employee_Role_Enum.EMPLOYEE;
 
-    @Column(name = "manager_email", nullable = false, length = 255)
+    @Column(name = "managerEmail", nullable = false, length = 255)
     private String managerEmail;
 
-    @Column(name = "leave_balance", nullable = false)
+    @Column(name = "leaveBalance", nullable = false)
     private Integer leaveBalance = 12;
 }
