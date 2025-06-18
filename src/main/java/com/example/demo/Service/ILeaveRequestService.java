@@ -1,9 +1,10 @@
 package com.example.demo.Service;
 
+import java.util.UUID;
+
 import com.example.demo.DTO.Request.LeaveRequestDTO;
 import com.example.demo.Model.Leave_Request;
 
-import java.util.UUID;
 
 public interface ILeaveRequestService {
 
@@ -15,4 +16,5 @@ public interface ILeaveRequestService {
 
     void delete(UUID id);
 
+    // List<Leave_Request> getLeaveRequestByEmail(String email);
 }

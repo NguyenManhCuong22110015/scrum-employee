@@ -1,18 +1,20 @@
 package com.example.demo.Service.Impl;
 
+import java.sql.Timestamp;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.DTO.Request.LeaveRequestDTO;
 import com.example.demo.Enum.Leave_Status_Enum;
 import com.example.demo.Exception.ResourceNotFoundException;
 import com.example.demo.Model.Leave_Request;
 import com.example.demo.Repository.LeaveRequestRepository;
 import com.example.demo.Service.ILeaveRequestService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Timestamp;
-import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -33,6 +35,7 @@ public class LeaveRequestService implements ILeaveRequestService {
             throw e;
         }
     }
+
     @Override
     public Leave_Request create(LeaveRequestDTO requestDTO) {
         try {
@@ -63,4 +66,10 @@ public class LeaveRequestService implements ILeaveRequestService {
     public void delete(UUID id) {
 
     }
+
+    // @Override
+    // public List<Leave_Request> getLeaveRequestByEmail(String email) {
+    //     // Gọi phương thức ĐÃ SỬA TÊN trong Repository
+    //     return leaveRequestRepository.findByEmployeeEmail(email);
+    // }
 }
