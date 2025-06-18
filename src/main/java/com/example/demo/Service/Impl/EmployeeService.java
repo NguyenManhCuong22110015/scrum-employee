@@ -3,6 +3,7 @@ package com.example.demo.Service.Impl;
 import java.util.List;
 
 import com.example.demo.Enum.Employee_Role_Enum;
+import com.example.demo.Exception.EmployeeAlreadyExists;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,17 +59,14 @@ public class EmployeeService implements IEmployeeService {
     public Employee create(EmployeeDTO employeeDTO) {
         try {
             if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
-                throw new RuntimeException("Employee with email " + employeeDTO.getEmail() + " already exists");
+                throw new EmployeeAlreadyExists("Employee already exists");
             }
 
             Employee employee = new Employee();
             employee.setEmail(employeeDTO.getEmail());
             employee.setFullName(employeeDTO.getFullName());
             employee.setDepartment(employeeDTO.getDepartment());
-
-
             employee.setRole(employeeDTO.getRole());
-
             employee.setManagerEmail(employeeDTO.getManagerEmail());
             Employee savedEmployee = employeeRepository.save(employee);
 
@@ -155,7 +153,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public boolean checkIsAdmin(String emailRequester) {
+    public boolean isManager(String emailRequester) {
         try {
             Employee employee = employeeRepository.findByEmail(emailRequester)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));

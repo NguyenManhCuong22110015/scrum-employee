@@ -15,6 +15,8 @@ public interface ILeaveRequestService {
 
     void delete(UUID id);
 
-    void approveRequest();
+    void approveRequest(UUID id);
+
+    void rejectRequest(UUID id);
 
 }
