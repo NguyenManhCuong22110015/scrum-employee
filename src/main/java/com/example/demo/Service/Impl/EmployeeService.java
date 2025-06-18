@@ -58,11 +58,9 @@ public class EmployeeService implements IEmployeeService {
             employee.setEmail(employeeDTO.getEmail());
             employee.setFullName(employeeDTO.getFullName());
             employee.setDepartment(employeeDTO.getDepartment());
-            employee.setRole(employeeDTO.getRole() != null ? employeeDTO.getRole() : Employee_Role_Enum.EMPLOYEE);
             employee.setManagerEmail(employeeDTO.getManagerEmail());
-            employee.setLeaveBalance(employeeDTO.getLeaveBalance() != null ? employeeDTO.getLeaveBalance() : 12);
-
             Employee savedEmployee = employeeRepository.save(employee);
+
             log.info("Created new employee with email: {}", savedEmployee.getEmail());
             return savedEmployee;
         } catch (Exception e) {
