@@ -3,6 +3,7 @@ package com.example.demo.Controllers;
 
 import java.util.List;
 
+import com.example.demo.Model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Model.Employees;
-import com.example.demo.Services.Employee;
 
-import com.example.demo.Model.Employee;
+import com.example.demo.Services.EmployeeRepository;
+
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -28,27 +29,27 @@ public class EmployeeController {
 
 
     @Autowired
-    private Employee employeeRepository;
+    private EmployeeRepository employeeRepository;
 
     @GetMapping
-    public List<Employees> getAllEmployees() {
+    public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
     @GetMapping("/find/{email}")
-    public Employees getEmployeeById(@PathVariable String email) {
+    public Employee getEmployeeById(@PathVariable String email) {
         return employeeRepository.findById(email).orElse(null);
     }
 
     @PutMapping("/update/{email}")
-    public Employees updateEmployee(@PathVariable String email, @RequestBody Employees updatedEmployee) {
-        Employees employee = employeeRepository.findById(email).orElse(null);
+    public Employee updateEmployee(@PathVariable String email, @RequestBody Employee updatedEmployee) {
+        Employee employee = employeeRepository.findById(email).orElse(null);
         if (employee != null) {
-            employee.setFullName(updatedEmployee.getFullName());
+            employee.setFull_name(updatedEmployee.getFull_name());
             employee.setDepartment(updatedEmployee.getDepartment());
-            employee.setEmployeesRole(updatedEmployee.getEmployeesRole());
-            employee.setLeaveBalance(updatedEmployee.getLeaveBalance());
-            employee.setManagerEmail(updatedEmployee.getManagerEmail());
+            employee.setRole(updatedEmployee.getRole());
+            employee.setLeave_balance(updatedEmployee.getLeave_balance());
+            employee.setManager_email(updatedEmployee.getManager_email());
             return employeeRepository.save(employee);
         } else {
             return null;
@@ -56,7 +57,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/add")
-    public Employees createEmployee(@RequestBody Employees employee) {
+    public Employee createEmployee(@RequestBody Employee employee) {
         return employeeRepository.save(employee);
     }
 
@@ -69,10 +70,6 @@ public class EmployeeController {
 
     private Map<String, Employee> employeeMap = new HashMap<>();
 
-    @GetMapping
-    public Collection<Employee> getAllEmployees() {
-        return employeeMap.values();
-    }
 
     @GetMapping("/{email}")
     public Employee getEmployee(@PathVariable String email) {
@@ -85,16 +82,8 @@ public class EmployeeController {
         return employee;
     }
 
-    @PutMapping("/{email}")
-    public Employee updateEmployee(@PathVariable String email, @RequestBody Employee updatedEmployee) {
-        employeeMap.put(email, updatedEmployee);
-        return updatedEmployee;
-    }
 
-    @DeleteMapping("/{email}")
-    public String deleteEmployee(@PathVariable String email) {
-        employeeMap.remove(email);
-        return "Deleted: " + email;
-    }
+
+
 
 }
