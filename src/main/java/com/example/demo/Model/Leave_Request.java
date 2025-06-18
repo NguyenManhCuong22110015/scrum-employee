@@ -34,35 +34,35 @@ public class Leave_Request {
     private UUID id;
 
     @Column(name = "employee_email", nullable = false)
-    private String employee_email;
+    private String employeeEmail;
 
     @Enumerated(EnumType.STRING)
-    private Leave_Type_Enum leave_type;
+    private Leave_Type_Enum leaveType;
 
     @Column(name = "start_date", nullable = false, updatable = false)
-    private LocalDate start_date;
+    private LocalDate startDate;
 
     @Column(name = "end_date", nullable = false, updatable = false)
-    private LocalDate end_date;
+    private LocalDate endDate;
 
     @Column(name = "reason", nullable = false, length = 1000)
     private String reason;
 
     @Enumerated(EnumType.STRING)
-    private Leave_Status_Enum leave_status = Leave_Status_Enum.PENDING;
+    private Leave_Status_Enum leaveStatus = Leave_Status_Enum.PENDING;
 
     @Column(name = "approved_at", nullable = true)
-    private Timestamp approved_at;
+    private Timestamp approvedAt;
 
     @Column(name = "create_at", nullable = false, updatable = false)
-    private Timestamp create_at = new Timestamp(System.currentTimeMillis());
+    private Timestamp createAt = new Timestamp(System.currentTimeMillis());
 
     @Transient
     private long total;
 
     public long getTotal() {
-        if (start_date != null && end_date != null) {
-            return ChronoUnit.DAYS.between(start_date, end_date) + 1;
+        if (startDate != null && endDate != null) {
+            return ChronoUnit.DAYS.between(startDate, endDate) + 1;
         }
         return 0;
     }

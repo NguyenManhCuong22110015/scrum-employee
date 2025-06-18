@@ -10,6 +10,6 @@ import com.example.demo.Model.Leave_Request;
 
 @Repository
 public interface LeaveRequestRepository extends JpaRepository<Leave_Request, java.util.UUID> {
-    List<Leave_Request> findByEmployeeEmail(String employeeEmail);
+    List<Leave_Request> findByEmployeeEmail(String employee_email);
 }
 

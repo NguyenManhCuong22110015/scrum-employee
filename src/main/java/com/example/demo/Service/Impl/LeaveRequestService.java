@@ -41,14 +41,14 @@ public class LeaveRequestService implements ILeaveRequestService {
         try {
             Leave_Request leaveRequest = new Leave_Request();
 
-            leaveRequest.setEmployee_email(requestDTO.getEmployeeEmail());
-            leaveRequest.setLeave_type(requestDTO.getLeaveType());
-            leaveRequest.setStart_date(requestDTO.getStartDate());
-            leaveRequest.setEnd_date(requestDTO.getEndDate());
+            leaveRequest.setEmployeeEmail(requestDTO.getEmployeeEmail());
+            leaveRequest.setLeaveType(requestDTO.getLeaveType());
+            leaveRequest.setStartDate(requestDTO.getStartDate());
+            leaveRequest.setEndDate(requestDTO.getEndDate());
             leaveRequest.setReason(requestDTO.getReason());
-            leaveRequest.setLeave_status(Leave_Status_Enum.PENDING); // default
-            leaveRequest.setApproved_at(null); // chưa duyệt
-            leaveRequest.setCreate_at(new Timestamp(System.currentTimeMillis()));
+            leaveRequest.setLeaveStatus(Leave_Status_Enum.PENDING); // default
+            leaveRequest.setApprovedAt(null); // chưa duyệt
+            leaveRequest.setCreateAt(new Timestamp(System.currentTimeMillis()));
             Leave_Request requestSaved = leaveRequestRepository.save(leaveRequest);
             return requestSaved;
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public class LeaveRequestService implements ILeaveRequestService {
     public void approveRequest(UUID id) {
         try {
             Leave_Request leaveRequest = leaveRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
-            leaveRequest.setLeave_status(Leave_Status_Enum.APPROVED);
+            leaveRequest.setLeaveStatus(Leave_Status_Enum.APPROVED);
             leaveRequestRepository.save(leaveRequest);
         }
         catch (Exception e){
@@ -90,7 +90,7 @@ public class LeaveRequestService implements ILeaveRequestService {
     public void rejectRequest(UUID id) {
         try {
             Leave_Request leaveRequest = leaveRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
-            leaveRequest.setLeave_status(Leave_Status_Enum.REJECTED);
+            leaveRequest.setLeaveStatus(Leave_Status_Enum.REJECTED);
             leaveRequestRepository.save(leaveRequest);
         }
         catch (Exception e){
