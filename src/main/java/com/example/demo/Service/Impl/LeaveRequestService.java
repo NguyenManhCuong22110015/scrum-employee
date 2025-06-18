@@ -65,7 +65,26 @@ public class LeaveRequestService implements ILeaveRequestService {
     }
 
     @Override
-    public void approveRequest() {
+    public void approveRequest(UUID id) {
+        try {
+            Leave_Request leaveRequest = leaveRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
+            leaveRequest.setLeave_status(Leave_Status_Enum.APPROVED);
+            leaveRequestRepository.save(leaveRequest);
+        }
+        catch (Exception e){
+            throw e;
+        }
+    }
 
+    @Override
+    public void rejectRequest(UUID id) {
+        try {
+            Leave_Request leaveRequest = leaveRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
+            leaveRequest.setLeave_status(Leave_Status_Enum.REJECTED);
+            leaveRequestRepository.save(leaveRequest);
+        }
+        catch (Exception e){
+            throw e;
+        }
     }
 }

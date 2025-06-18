@@ -24,6 +24,6 @@ public interface IEmployeeService {
     
     boolean existsByEmail(String email);
 
-    boolean checkIsAdmin(String emailRequester);
+    boolean isManager(String emailRequester);
 
 }

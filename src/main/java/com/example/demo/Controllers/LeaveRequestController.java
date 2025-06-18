@@ -3,6 +3,7 @@ package com.example.demo.Controllers;
 
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,14 +44,25 @@ public class LeaveRequestController {
         leaveRequestService.delete(id);
         return "Deleted Successfully!";
     }
-
     @PostMapping("/approve")
-    public String approveRequest(@RequestParam String emailRequester, @RequestParam UUID id){
-        if(employeeService.checkIsAdmin(emailRequester)){
-            throw  new ResourceNotFoundException("No");
+    public ResponseEntity<?> approveRequest(@RequestParam String emailRequester, @RequestParam UUID id) {
+        if (!employeeService.isManager(emailRequester)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only managers can approve requests.");
         }
 
-        return "Yes";
+        leaveRequestService.approveRequest(id);
+        return ResponseEntity.ok("Leave request approved.");
     }
+
+    @PostMapping("/reject")
+    public ResponseEntity<?> rejectRequest(@RequestParam String emailRequester, @RequestParam UUID id) {
+        if (!employeeService.isManager(emailRequester)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only managers can reject requests.");
+        }
+
+        leaveRequestService.rejectRequest(id);
+        return ResponseEntity.ok("Leave request rejected.");
+    }
+
 
 }
