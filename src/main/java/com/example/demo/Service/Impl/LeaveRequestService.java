@@ -4,7 +4,7 @@ import com.example.demo.DTO.Request.LeaveRequestDTO;
 import com.example.demo.Enum.Leave_Status_Enum;
 import com.example.demo.Exception.ResourceNotFoundException;
 import com.example.demo.Model.Leave_Request;
-import com.example.demo.Repositoty.LeaveRequestRepository;
+import com.example.demo.Repository.LeaveRequestRepository;
 import com.example.demo.Service.ILeaveRequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -29,5 +29,10 @@ public class LeaveRequestController {
         Leave_Request leaveRequest= leaveRequestService.create(requestDTO);
         return ResponseEntity.ok(leaveRequest);
     }
+    @DeleteMapping("/del/{id}")
+    public String deleteLeaveRequest(@PathVariable UUID id){
+        leaveRequestService.delete(id);
+        return "Deleted Successfully!";
+    }
 
 }
