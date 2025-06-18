@@ -1,18 +1,20 @@
 package com.example.demo.Service.Impl;
 
+import java.sql.Timestamp;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.DTO.Request.LeaveRequestDTO;
 import com.example.demo.Enum.Leave_Status_Enum;
 import com.example.demo.Exception.ResourceNotFoundException;
 import com.example.demo.Model.Leave_Request;
 import com.example.demo.Repository.LeaveRequestRepository;
 import com.example.demo.Service.ILeaveRequestService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Timestamp;
-import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -33,19 +35,20 @@ public class LeaveRequestService implements ILeaveRequestService {
             throw e;
         }
     }
+
     @Override
     public Leave_Request create(LeaveRequestDTO requestDTO) {
         try {
             Leave_Request leaveRequest = new Leave_Request();
 
-            leaveRequest.setEmployee_email(requestDTO.getEmployeeEmail());
-            leaveRequest.setLeave_type(requestDTO.getLeaveType());
-            leaveRequest.setStart_date(requestDTO.getStartDate());
-            leaveRequest.setEnd_date(requestDTO.getEndDate());
+            leaveRequest.setEmployeeEmail(requestDTO.getEmployeeEmail());
+            leaveRequest.setLeaveType(requestDTO.getLeaveType());
+            leaveRequest.setStartDate(requestDTO.getStartDate());
+            leaveRequest.setEndDate(requestDTO.getEndDate());
             leaveRequest.setReason(requestDTO.getReason());
-            leaveRequest.setLeave_status(Leave_Status_Enum.PENDING); // default
-            leaveRequest.setApproved_at(null); // chưa duyệt
-            leaveRequest.setCreate_at(new Timestamp(System.currentTimeMillis()));
+            leaveRequest.setLeaveStatus(Leave_Status_Enum.PENDING); // default
+            leaveRequest.setApprovedAt(null); // chưa duyệt
+            leaveRequest.setCreateAt(new Timestamp(System.currentTimeMillis()));
             Leave_Request requestSaved = leaveRequestRepository.save(leaveRequest);
             return requestSaved;
         } catch (Exception e) {
@@ -64,11 +67,18 @@ public class LeaveRequestService implements ILeaveRequestService {
 
     }
 
+
+    // @Override
+    // public List<Leave_Request> getLeaveRequestByEmail(String email) {
+    //     // Gọi phương thức ĐÃ SỬA TÊN trong Repository
+    //     return leaveRequestRepository.findByEmployeeEmail(email);
+    // }
+
     @Override
     public void approveRequest(UUID id) {
         try {
             Leave_Request leaveRequest = leaveRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
-            leaveRequest.setLeave_status(Leave_Status_Enum.APPROVED);
+            leaveRequest.setLeaveStatus(Leave_Status_Enum.APPROVED);
             leaveRequestRepository.save(leaveRequest);
         }
         catch (Exception e){
@@ -80,11 +90,12 @@ public class LeaveRequestService implements ILeaveRequestService {
     public void rejectRequest(UUID id) {
         try {
             Leave_Request leaveRequest = leaveRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
-            leaveRequest.setLeave_status(Leave_Status_Enum.REJECTED);
+            leaveRequest.setLeaveStatus(Leave_Status_Enum.REJECTED);
             leaveRequestRepository.save(leaveRequest);
         }
         catch (Exception e){
             throw e;
         }
     }
+
 }

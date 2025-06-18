@@ -1,20 +1,19 @@
-package com.example.demo.Controllers;
+package com.example.demo.Controller;
 
 
 import java.util.UUID;
-
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.DTO.Request.LeaveRequestDTO;
-import com.example.demo.Exception.ResourceNotFoundException;
 import com.example.demo.Model.Leave_Request;
 import com.example.demo.Service.IEmployeeService;
 import com.example.demo.Service.ILeaveRequestService;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 
 @RestController
 @RequestMapping("/api/v1/leave-request")
@@ -23,7 +22,11 @@ public class LeaveRequestController {
 
     private final ILeaveRequestService leaveRequestService;
 
+    
+
+
     private final IEmployeeService employeeService;
+
 
 
 
@@ -32,6 +35,17 @@ public class LeaveRequestController {
         Leave_Request leaveRequest = leaveRequestService.getById(id);
         return ResponseEntity.ok(leaveRequest);
     }
+
+
+    
+    // @GetMapping("/all/{email}")
+    // public ResponseEntity<List<Leave_Request>> getAllEmployees(@PathVariable String email) {
+    //     List<Leave_Request> leaveRequest = leaveRequestService.getLeaveRequestByEmail(email);
+    //     return ResponseEntity.ok(leaveRequest);
+    // }
+
+
+
 
     @PostMapping("/create")
     public ResponseEntity<Leave_Request> createLeaveRequest(@Valid @RequestBody LeaveRequestDTO requestDTO){
@@ -44,6 +58,8 @@ public class LeaveRequestController {
         leaveRequestService.delete(id);
         return "Deleted Successfully!";
     }
+
+
     @PostMapping("/approve")
     public ResponseEntity<?> approveRequest(@RequestParam String emailRequester, @RequestParam UUID id) {
         if (!employeeService.isManager(emailRequester)) {
@@ -63,6 +79,7 @@ public class LeaveRequestController {
         leaveRequestService.rejectRequest(id);
         return ResponseEntity.ok("Leave request rejected.");
     }
+
 
 
 }
