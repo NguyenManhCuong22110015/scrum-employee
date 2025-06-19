@@ -114,4 +114,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleEmployeeAlreadyExists(EmployeeAlreadyExists ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(buildErrorBody(ex.getMessage(), HttpStatus.CONFLICT));
     }
+
+    @ExceptionHandler(InsufficientLeaveBalanceException.class)
+    public ResponseEntity<?> handleInsufficientLeaveBalance(InsufficientLeaveBalanceException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrorBody(ex.getMessage(), HttpStatus.BAD_REQUEST));
+    }
+
+    @ExceptionHandler(InvalidDateRangeException.class)
+    public ResponseEntity<?> handleInvalidDateRange(InvalidDateRangeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildErrorBody(ex.getMessage(), HttpStatus.BAD_REQUEST));
+    }
+
+    @ExceptionHandler(LeaveRequestConflictException.class)
+    public ResponseEntity<?> handleLeaveRequestConflict(LeaveRequestConflictException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(buildErrorBody(ex.getMessage(), HttpStatus.CONFLICT));
+    }
+
+    @ExceptionHandler(UnauthorizedOperationException.class)
+    public ResponseEntity<?> handleUnauthorizedOperation(UnauthorizedOperationException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildErrorBody(ex.getMessage(), HttpStatus.FORBIDDEN));
+    }
 }
